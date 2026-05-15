@@ -14,7 +14,8 @@ import {
   ExternalLink,
   ChevronRight,
   Briefcase,
-  Check
+  Check,
+  Download
 } from 'lucide-react';
 
 // --- DATA ---
@@ -185,6 +186,10 @@ export default function App() {
             <button onClick={() => scrollTo('contact')} className="px-6 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold transition-all border border-slate-700">
               Contact Me
             </button>
+            <a href="/Sasikumar_Saminathan_Resume.pdf" download className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all flex items-center gap-2">
+              <Download className="w-5 h-5" />
+              Download Resume
+            </a>
           </div>
           <div className="flex items-center gap-6 justify-center md:justify-start pt-8">
             <a href="https://github.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-slate-100 transition-colors">
@@ -433,6 +438,10 @@ export default function App() {
               <MapPin className="w-5 h-5 text-slate-400" />
               <span className="text-slate-300">{personalInfo.location}</span>
             </div>
+            <a href="/Sasikumar_Saminathan_Resume.pdf" download className="w-full flex items-center gap-4 p-4 rounded-xl bg-blue-600 hover:bg-blue-700 border border-blue-500 transition-colors group text-left">
+              <Download className="w-5 h-5 text-white" />
+              <span className="text-white group-hover:text-blue-100 transition-colors font-semibold">Download Resume</span>
+            </a>
           </div>
           
         </div>
