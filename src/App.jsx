@@ -192,13 +192,13 @@ export default function App() {
             </a>
           </div>
           <div className="flex items-center gap-6 justify-center md:justify-start pt-8">
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-slate-100 transition-colors">
+            <a href="https://github.com/Sasikumar77" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-slate-100 transition-colors">
               <Github className="w-6 h-6" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-blue-500 transition-colors">
+            <a href="https://www.linkedin.com/in/sasikumardev/" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-blue-500 transition-colors">
               <Linkedin className="w-6 h-6" />
             </a>
-            <a href="https://hackerrank.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-emerald-500 transition-colors flex items-center gap-1">
+            <a href="https://www.hackerrank.com/profile/sasikumar_samin1" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-emerald-500 transition-colors flex items-center gap-1">
               <Code2 className="w-6 h-6" />
             </a>
           </div>
@@ -450,9 +450,9 @@ export default function App() {
       {/* Footer */}
       <footer className="py-8 text-center border-t border-slate-800/50 mt-12 bg-slate-950">
         <div className="flex justify-center gap-6 mb-4">
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-blue-500 transition-colors"><Linkedin className="w-5 h-5" /></a>
-          <a href="https://hackerrank.com" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-emerald-500 transition-colors"><Code2 className="w-5 h-6" /></a>
+          <a href="https://github.com/Sasikumar77" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
+          <a href="https://www.linkedin.com/in/sasikumardev/" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-blue-500 transition-colors"><Linkedin className="w-5 h-5" /></a>
+          <a href="https://www.hackerrank.com/profile/sasikumar_samin1" target="_blank" rel="noreferrer" className="text-slate-500 hover:text-emerald-500 transition-colors"><Code2 className="w-5 h-6" /></a>
         </div>
         <p className="text-slate-500 text-sm">
           Designed & Built by {personalInfo.name} &copy; {new Date().getFullYear()}
