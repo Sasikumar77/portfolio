@@ -342,6 +342,44 @@ export default function App() {
         </div>
       </section>
 
+      {/* Featured Article Section */}
+      <section className="py-24 px-6 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 border-y border-slate-800/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-12 flex items-center gap-3">
+            <div className="h-1 w-20 bg-blue-500 rounded-full"></div>
+            <h2 className="text-2xl font-bold text-slate-100">Featured in the News</h2>
+          </div>
+          <a 
+            href="https://www.freshworks.com/theworks/company-news/freshworks-software-academy-apps/"
+            target="_blank"
+            rel="noreferrer"
+            className="group block"
+          >
+            <div className="bg-slate-900/80 border-2 border-blue-500/40 hover:border-blue-500 rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-1 backdrop-blur">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <div className="inline-block mb-3 px-3 py-1 bg-blue-500/20 border border-blue-500/50 rounded-full text-xs font-semibold text-blue-400">
+                    FRESHWORKS OFFICIAL
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-slate-100 group-hover:text-blue-400 transition-colors mb-3">
+                    Freshworks Software Academy (FSSA) Success Story
+                  </h3>
+                  <p className="text-slate-400 mb-4 leading-relaxed">
+                    Featured in the official Freshworks company news article for excellence in the Full Stack Development Certification program. A recognition of commitment to building scalable systems and driving innovation.
+                  </p>
+                </div>
+                <ExternalLink className="w-6 h-6 text-blue-400 flex-shrink-0 ml-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 bg-slate-800 text-slate-300 text-sm rounded-md border border-slate-700">FSSA Program</span>
+                <span className="px-3 py-1 bg-slate-800 text-slate-300 text-sm rounded-md border border-slate-700">Full Stack Development</span>
+                <span className="px-3 py-1 bg-slate-800 text-slate-300 text-sm rounded-md border border-slate-700">Aug 2022 - Dec 2023</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
       {/* Education & Contact Section */}
       <section id="contact" className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
         
@@ -358,20 +396,7 @@ export default function App() {
                 </div>
                 <div>
                   <h4 className="text-slate-100 font-medium text-lg">{edu.degree}</h4>
-                  <div className="flex items-center gap-2 mt-1">
-                    <p className="text-blue-400">{edu.institution}</p>
-                    {edu.link && (
-                      <a 
-                        href={edu.link} 
-                        target="_blank" 
-                        rel="noreferrer" 
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors"
-                        title="Read the Freshworks Article"
-                      >
-                        <ExternalLink className="w-3 h-3" /> Article
-                      </a>
-                    )}
-                  </div>
+                  <p className="text-blue-400">{edu.institution}</p>
                   <p className="text-sm text-slate-500 mt-1">{edu.period}</p>
                 </div>
               </div>
