@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /node_modules/
+Disallow: /.env
+Disallow: /.git/
+Disallow: /dist/
+
+# Specific crawl rate for Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://sasikumar-dev.vercel.app/sitemap.xml
