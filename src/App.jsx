@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Terminal, 
   Server, 
@@ -14,10 +14,6 @@ import {
   ExternalLink,
   ChevronRight,
   Briefcase,
-  MessageSquare,
-  X,
-  Send,
-  Loader2,
   Check
 } from 'lucide-react';
 
@@ -94,30 +90,9 @@ const SectionHeading = ({ title, subtitle }) => (
   </div>
 );
 
-const formatMessage = (text) => {
-  if (!text) return null;
-  // Split the text by **bold** markdown
-  const parts = text.split(/(\*\*.*?\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i} className="font-bold text-white">{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-};
-
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([{ role: 'model', text: "Hi! I'm Sasi's AI Assistant ✨. I can answer questions about his skills, experience, or education. What would you like to know?" }]);
-  const [chatInput, setChatInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
   const [copiedItem, setCopiedItem] = useState(null);
-  const chatEndRef = useRef(null);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages, isChatOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -144,61 +119,6 @@ export default function App() {
         behavior: 'smooth'
       });
     }
-  };
-
-  const callGemini = async (userQuery, history) => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
-    
-    const systemInstruction = `You are the AI assistant for Sasikumar (Sasi) Saminathan's portfolio. You answer questions from recruiters about his experience. 
-    Be concise, friendly, and professional. Highlight his Full Stack (Java, Spring Boot, React) skills.
-    He has 2.5 years of experience at Freshworks, working on AI agent epics, RESTful APIs, and resolved 100+ production issues.
-    He built automation frameworks using Playwright and Selenium. He has a BCA from SASTRA University.
-    He completed the Freshworks Software Academy (FSSA) program and was featured in their company news article for his work.
-    He is currently available for new opportunities based in Chennai, India.
-    If asked something unrelated, politely steer it back to his professional profile.`;
-
-    const contextPrompt = history.map(m => `${m.role === 'user' ? 'Recruiter' : 'AI Assistant'}: ${m.text}`).join('\n') + `\nRecruiter: ${userQuery}\nAI Assistant:`;
-
-    const payload = {
-      contents: [{ parts: [{ text: contextPrompt }] }],
-      systemInstruction: { parts: [{ text: systemInstruction }] }
-    };
-
-    const delays = [1000, 2000, 4000, 8000, 16000];
-
-    for (let i = 0; i < 5; i++) {
-      try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        return data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't generate a response.";
-      } catch (error) {
-        if (i === 4) return "I'm currently experiencing technical difficulties. Please contact Sasi directly at thesasi.dev@gmail.com.";
-        await new Promise(res => setTimeout(res, delays[i]));
-      }
-    }
-  };
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!chatInput.trim() || isTyping) return;
-
-    const newUserMsg = { role: 'user', text: chatInput };
-    const newHistory = [...chatMessages, newUserMsg];
-    
-    setChatMessages(newHistory);
-    setChatInput("");
-    setIsTyping(true);
-
-    const aiResponseText = await callGemini(newUserMsg.text, chatMessages);
-    
-    setChatMessages([...newHistory, { role: 'model', text: aiResponseText }]);
-    setIsTyping(false);
   };
 
   const handleCopy = (text, type) => {
@@ -504,71 +424,6 @@ export default function App() {
           Designed & Built by {personalInfo.name} &copy; {new Date().getFullYear()}
         </p>
       </footer>
-
-      {/* AI Chat Widget */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        {isChatOpen && (
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl w-[320px] sm:w-[380px] h-[450px] flex flex-col mb-4 overflow-hidden shadow-blue-900/20">
-            <div className="bg-slate-800 p-4 flex justify-between items-center border-b border-slate-700">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-500/20 rounded-lg">
-                  <MessageSquare className="w-5 h-5 text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-slate-100 flex items-center gap-1">✨ Ask Sasi's AI</h3>
-                  <p className="text-xs text-slate-400">Powered by Gemini</p>
-                </div>
-              </div>
-              <button onClick={() => setIsChatOpen(false)} className="text-slate-400 hover:text-white transition-colors">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {chatMessages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed whitespace-pre-wrap ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 border border-slate-700 rounded-bl-none'}`}>
-                    {formatMessage(msg.text)}
-                  </div>
-                </div>
-              ))}
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-slate-800 border border-slate-700 rounded-2xl rounded-bl-none p-3 px-4 flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />
-                    <span className="text-xs text-slate-400">Thinking...</span>
-                  </div>
-                </div>
-              )}
-              <div ref={chatEndRef} />
-            </div>
-
-            <form onSubmit={handleSendMessage} className="p-3 bg-slate-900 border-t border-slate-800 flex gap-2">
-              <input
-                type="text"
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                placeholder="Ask about my skills..."
-                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition-colors"
-              />
-              <button 
-                type="submit" 
-                disabled={isTyping || !chatInput.trim()}
-                className="p-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </form>
-          </div>
-        )}
-
-        <button 
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className={`p-4 rounded-full shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 ${isChatOpen ? 'bg-slate-800 text-slate-400 border border-slate-700' : 'bg-blue-600 text-white shadow-blue-500/25'}`}
-        >
-          {isChatOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-        </button>
-      </div>
 
     </div>
   );
