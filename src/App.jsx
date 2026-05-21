@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Terminal, 
-  Server, 
-  Code2, 
-  Wrench, 
-  Award, 
-  GraduationCap, 
-  MapPin, 
-  Mail, 
-  Phone, 
-  Github, 
-  Linkedin, 
+import {
+  Terminal,
+  Server,
+  Code2,
+  Wrench,
+  Award,
+  GraduationCap,
+  MapPin,
+  Mail,
+  Phone,
+  Github,
+  Linkedin,
   ExternalLink,
   ChevronRight,
   Briefcase,
@@ -68,15 +68,72 @@ const awards = [
   { title: "Above & Beyond Certificate", description: "Resolved 100+ production customer issues in H1 2024." }
 ];
 
-const education = [
-  { 
-    degree: "Bachelor of Computer Applications (BCA) - Online Mode", 
-    institution: "SASTRA University", 
-    period: "Mar 2025 - Present" 
+const projects = [
+  {
+    title: "Deployment Status Tracker",
+    role: "Solo Developer",
+    context: "Internal Tool @ Freshworks",
+    contextColor: "blue",
+    description: "A real-time deployment monitoring dashboard giving the engineering team instant visibility into release rollouts for Freshdesk, Freshchat, and Freshbots across staging and five global production regions (US, India, EU, Middle East, Australia).",
+    highlights: [
+      "Designed a Node.js/Express backend that aggregated data from three separate APIs — Google Calendar, GitHub Tags API, and Freshworks' internal Kubix deployment platform — into a single unified response",
+      "Built a two-step API architecture that decoupled tag discovery from status fetching, so the React dashboard could show release tags instantly while deployment statuses loaded in the background",
+      "Implemented regex-based tag pattern matching and iterative tag-walking to always surface the most current deployment status per region",
+      "Handled product-specific tag naming conventions and pipeline structures for three different products",
+      "Containerised with Docker and deployed on an internal pod"
+    ],
+    tech: ["React.js", "Node.js", "Express", "Docker", "Google Calendar API", "GitHub API", "REST APIs"],
+    links: []
   },
-  { 
-    degree: "Full Stack Development Certification", 
-    institution: "FSSA - Software Academy", 
+  {
+    title: "Haybot",
+    role: "Ideator & Team Lead",
+    context: "Freshworks Internal Hackathon",
+    contextColor: "purple",
+    description: "An AI-powered log analysis tool that eliminates manual log inspection by automatically summarising large log files into structured, actionable insights — enabling engineers to identify issues in seconds instead of minutes.",
+    highlights: [
+      "Came up with the original idea — noticed engineers were manually reading logs and built an AI solution to automate it",
+      "Led a cross-functional team of 4 junior developers end to end — from ideation to final presentation",
+      "Architected the core batching logic to pull logs from an internal tool, chunk and stream them to an AI model, and render structured summaries on the frontend",
+      "Built the React.js frontend using GitHub Copilot to deliver fast within the 2-day window",
+      "Solved multiple technical challenges around async data handling, batching strategy, and AI response parsing under time pressure",
+      "Received appreciation from panel directors and senior leadership — specifically recognised for delivering a production-ready prototype as a team of junior developers within 2 days"
+    ],
+    tech: ["React.js", "Spring Boot", "AI/LLM Integration", "GitHub Copilot"],
+    links: []
+  },
+  {
+    title: "ShopNow",
+    role: "Solo Developer",
+    context: "FSSA Software Academy",
+    contextColor: "emerald",
+    description: "A three-tier full stack e-commerce platform connecting local sellers with buyers, featuring location-based product discovery, seller listings, and purchase flows — built with enterprise-grade architecture practices.",
+    highlights: [
+      "Designed a layered backend architecture following DAO, Service, Validator, and Util layers with clean separation of concerns and SOLID principles",
+      "Built REST APIs using Java Servlets and JSP to handle buyer and seller operations with custom exception handling and input validation",
+      "Designed MySQL schema with product and image URL relationships, integrated via JDBC",
+      "Maintained code quality using SonarCloud static analysis and JaCoCo code coverage reporting",
+      "Wrote JUnit 5 test suites across the backend",
+      "Built responsive frontend with vanilla JavaScript, HTML5, and CSS3 with LocalStorage for client-side state"
+    ],
+    tech: ["Java 17", "Servlets", "JSP", "MySQL", "Maven", "JUnit 5", "SonarCloud", "JaCoCo", "HTML5", "CSS3", "JavaScript"],
+    links: [
+      { label: "Frontend", url: "https://github.com/fssa-batch3/sasikumar.saminathan__web_project" },
+      { label: "Core Java", url: "https://github.com/fssa-batch3/sec_c_sec_c_sasikumar.saminathan__corejava_project_2" },
+      { label: "Servlet/JSP", url: "https://github.com/fssa-batch3/sec_c_sasikumar.saminathan__servlet_jsp_project" }
+    ]
+  }
+];
+
+const education = [
+  {
+    degree: "Bachelor of Computer Applications (BCA) - Online Mode",
+    institution: "SASTRA University",
+    period: "Mar 2025 - Present"
+  },
+  {
+    degree: "Full Stack Development Certification",
+    institution: "FSSA - Software Academy",
     period: "Aug 2022 - Dec 2023",
     link: "https://www.freshworks.com/theworks/company-news/freshworks-software-academy-apps/"
   }
@@ -91,13 +148,92 @@ const SectionHeading = ({ title, subtitle }) => (
   </div>
 );
 
+const contextColorMap = {
+  blue:    { badge: 'bg-blue-500/10 text-blue-400 border-blue-500/30',   border: 'hover:border-blue-500/50',   dot: 'bg-blue-500' },
+  purple:  { badge: 'bg-purple-500/10 text-purple-400 border-purple-500/30', border: 'hover:border-purple-500/50', dot: 'bg-purple-500' },
+  emerald: { badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30', border: 'hover:border-emerald-500/50', dot: 'bg-emerald-500' },
+};
+
+const ProjectCard = ({ project }) => {
+  const [expanded, setExpanded] = useState(false);
+  const colors = contextColorMap[project.contextColor] || contextColorMap.blue;
+
+  return (
+    <div className={`group bg-slate-900/60 border border-slate-800 ${colors.border} rounded-2xl p-7 md:p-9 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/60`}>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
+        <div className="flex-1">
+          <div className="flex flex-wrap gap-2 mb-3">
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${colors.badge}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`}></span>
+              {project.context}
+            </span>
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
+              {project.role}
+            </span>
+          </div>
+          <h3 className="text-2xl font-bold text-slate-100 group-hover:text-white transition-colors">{project.title}</h3>
+        </div>
+        {project.links.length > 0 && (
+          <div className="flex gap-2 flex-shrink-0">
+            {project.links.map((link, i) => (
+              <a
+                key={i}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium border border-slate-700 transition-colors"
+              >
+                <Github className="w-3.5 h-3.5" />
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Description */}
+      <p className="text-slate-400 leading-relaxed mb-6">{project.description}</p>
+
+      {/* Key Highlights */}
+      <div className="mb-6">
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white mb-3 transition-colors"
+        >
+          <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`} />
+          Key Highlights
+          <span className="ml-1 text-xs font-normal text-slate-500">({project.highlights.length})</span>
+        </button>
+        <ul className={`space-y-2.5 overflow-hidden transition-all duration-300 ${expanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          {project.highlights.map((h, i) => (
+            <li key={i} className="flex items-start gap-3 text-sm text-slate-300">
+              <Check className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+              <span className="leading-relaxed">{h}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Tech Stack */}
+      <div className="flex flex-wrap gap-2">
+        {project.tech.map((t, i) => (
+          <span key={i} className="px-3 py-1 bg-slate-950 text-slate-400 text-xs rounded-md border border-slate-800 font-mono">
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [copiedItem, setCopiedItem] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'skills'];
+      const sections = ['home', 'about', 'experience', 'skills', 'projects'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -140,7 +276,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-blue-500/30">
-      
+
       {/* Navbar */}
       <nav className="fixed top-0 w-full bg-slate-950/80 backdrop-blur-md z-50 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -148,7 +284,7 @@ export default function App() {
             Sasi<span className="text-blue-500">.dev</span>
           </div>
           <div className="hidden md:flex gap-8 text-sm font-medium">
-            {['Home', 'About', 'Experience', 'Skills'].map((item) => (
+            {['Home', 'About', 'Experience', 'Skills', 'Projects'].map((item) => (
               <button
                 key={item}
                 onClick={() => scrollTo(item.toLowerCase())}
@@ -158,7 +294,7 @@ export default function App() {
               </button>
             ))}
           </div>
-          <button 
+          <button
             onClick={() => scrollTo('contact')}
             className="hidden md:block px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all hover:scale-105 active:scale-95"
           >
@@ -254,7 +390,7 @@ export default function App() {
               </div>
             </div>
           </div>
-          
+
           <div className="flex-1 w-full space-y-6">
             <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800">
               <h3 className="text-xl font-bold text-slate-100 mb-6 flex items-center gap-2">
@@ -281,18 +417,18 @@ export default function App() {
             <div key={index} className="relative pl-8 md:pl-0">
               {/* Desktop Timeline Line */}
               <div className="hidden md:block absolute left-[50%] top-0 bottom-0 w-px bg-slate-800 -translate-x-1/2"></div>
-              
+
               <div className={`md:flex items-center justify-between w-full ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                
+
                 {/* Timeline Dot */}
                 <div className="absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-blue-500 border-4 border-slate-950 md:-translate-x-1/2 mt-1.5 md:mt-0 z-10"></div>
-                
+
                 <div className="md:w-[45%] mb-2 md:mb-0">
                   <div className={`text-blue-400 font-mono text-sm mb-2 ${index % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
                     {job.period}
                   </div>
                 </div>
-                
+
                 <div className="md:w-[45%] bg-slate-900/50 p-6 md:p-8 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all hover:-translate-y-1">
                   <div className="flex justify-between items-start mb-4">
                     <div>
@@ -314,7 +450,7 @@ export default function App() {
                     ))}
                   </ul>
                 </div>
-                
+
               </div>
             </div>
           ))}
@@ -347,6 +483,16 @@ export default function App() {
         </div>
       </section>
 
+      {/* Projects Section */}
+      <section id="projects" className="py-24 px-6 max-w-6xl mx-auto">
+        <SectionHeading title="Projects" subtitle />
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+          {projects.map((project, index) => (
+            <ProjectCard key={index} project={project} />
+          ))}
+        </div>
+      </section>
+
       {/* Featured Article Section */}
       <section className="py-24 px-6 bg-gradient-to-r from-blue-500/5 to-emerald-500/5 border-y border-slate-800/50">
         <div className="max-w-6xl mx-auto">
@@ -354,7 +500,7 @@ export default function App() {
             <div className="h-1 w-20 bg-blue-500 rounded-full"></div>
             <h2 className="text-2xl font-bold text-slate-100">Featured in the News</h2>
           </div>
-          <a 
+          <a
             href="https://www.freshworks.com/theworks/company-news/freshworks-software-academy-apps/"
             target="_blank"
             rel="noreferrer"
@@ -387,7 +533,7 @@ export default function App() {
 
       {/* Education & Contact Section */}
       <section id="contact" className="py-24 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
-        
+
         {/* Education Info */}
         <div>
           <SectionHeading title="Education" subtitle />
@@ -416,8 +562,8 @@ export default function App() {
             Currently open for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
           </p>
           <div className="space-y-4 mb-8">
-            <button 
-              onClick={() => handleCopy(personalInfo.email, 'email')} 
+            <button
+              onClick={() => handleCopy(personalInfo.email, 'email')}
               className="w-full flex items-center gap-4 p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 transition-colors group text-left"
             >
               {copiedItem === 'email' ? <Check className="w-5 h-5 text-emerald-400" /> : <Mail className="w-5 h-5 text-slate-400 group-hover:text-blue-400" />}
@@ -425,8 +571,8 @@ export default function App() {
                 {copiedItem === 'email' ? "Email copied to clipboard!" : personalInfo.email}
               </span>
             </button>
-            <button 
-              onClick={() => handleCopy(personalInfo.phone, 'phone')} 
+            <button
+              onClick={() => handleCopy(personalInfo.phone, 'phone')}
               className="w-full flex items-center gap-4 p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-emerald-500/50 transition-colors group text-left"
             >
               {copiedItem === 'phone' ? <Check className="w-5 h-5 text-emerald-400" /> : <Phone className="w-5 h-5 text-slate-400 group-hover:text-emerald-400" />}
@@ -443,7 +589,7 @@ export default function App() {
               <span className="text-white group-hover:text-blue-100 transition-colors font-semibold">Download Resume</span>
             </a>
           </div>
-          
+
         </div>
       </section>
 
